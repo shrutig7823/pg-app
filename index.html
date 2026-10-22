@@ -1,4 +1,3 @@
-<!-- This is your first web page. Type your page below this line. -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -13,27 +12,43 @@
     <input type="text" placeholder="For example: HSR Layout">
 
     <label>Maximum rent per month</label>
-    <input type="number" placeholder="15000">
+    <input type="number" id="maxRent" placeholder="15000">
 
-    <button>Find PGs</button>
-<div>
-      <h3>Sunrise PG (sample)</h3>
-      <p>Rent: ₹9,500 per month</p>
-      <p>HSR Layout, 1.2 km from your office</p>
-      <p>Food included: Yes</p>
-    </div>
-<div>
-      <h3>Ollie PG (sample)</h3>
-      <p>Rent: ₹10,500 per month</p>
-      <p>HSR Layout, 0.6 km from your office</p>
-      <p>Food included: Yes</p>
-    </div>
-<div>
-      <h3>Feb PG (sample)</h3>
-      <p>Rent: ₹13,500 per month</p>
-      <p>HSR Layout, 5 km from your office</p>
-      <p>Food included: Yes</p>
-    </div>
+    <button id="findBtn">Find PGs</button>
+    <div id="results"></div>
 
+    <script>
+      const pgs = [
+        { name: "Sunrise PG (sample)", rent: 9500, area: "HSR Layout" },
+        { name: "Ollie PG (sample)", rent: 12000, area: "Koramangala" },
+        { name: "Feb PG (sample)", rent: 8000, area: "BTM Layout" },
+        { name: "March (sample)", rent: 6000, area: "Green glenn Layout" }
+      ];
+
+      function showPgs(list) {
+        const results = document.getElementById("results");
+        if (list.length === 0) {
+          results.innerHTML = "<p>No PGs found. Try a higher rent.</p>";
+          return;
+        }
+        results.innerHTML = list.map(function (pg) {
+          return "<div><h3>" + pg.name + "</h3><p>Rent: ₹" + pg.rent + " per month</p><p>" + pg.area + "</p></div>";
+        }).join("");
+      }
+
+      showPgs(pgs);
+
+      document.getElementById("findBtn").onclick = function () {
+        const maxRent = Number(document.getElementById("maxRent").value);
+        if (!maxRent) {
+          showPgs(pgs);
+          return;
+        }
+        const matches = pgs.filter(function (pg) {
+          return pg.rent <= maxRent;
+        });
+        showPgs(matches);
+      };
+    </script>
   </body>
 </html>
