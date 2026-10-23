@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Find a PG</title>
+    <style>
+      body { font-family: sans-serif; max-width: 600px; margin: auto; padding: 16px; }
+      .card { border: 1px solid #ccc; border-radius: 8px; padding: 12px; margin: 8px 0; }
+      label { display: inline-block; margin: 4px 8px 4px 0; }
+    </style>
+  </head>
+  <body>
+    <h1>Find the nearest PG in Bangalore</h1>
+    <p>Search PGs near your office.</p>
+
+    <div>
+      <label>Where do you work?</label>
+      <input type="text" placeholder="For example: HSR Layout">
+    </div>
+    <div>
+      <label>Maximum rent per month</label>
+      <input type="number" id="maxRent" placeholder="15000">
+    </div>
+    <div id="amenityBox"></div>
+
+    <button id="findBtn">Find PGs</button>
+    <button id="resetBtn">Reset</button>
+
+    <div id="results"></div>
+    <script src="data.js"></script>
+    <script>
+     
+      // Draw one tick box per amenity
+      document.getElementById("amenityBox").innerHTML = AMENITIES.map(function (a) {
+        return '<label><input type="checkbox" class="amenity" value="' + a + '"> ' + a + '</label>';
+      }).join("");
+
+      // Draw a list of PGs into the results room
+      function showPgs(list) {
+        const results = document.getElementById("results");
+        if (list.length === 0) {
+          results.innerHTML = "<p>No PGs match. Try changing your filters.</p>";
+          return;
+        }
+        results.innerHTML = "<p>" + list.length + " PG(s) found</p>" + list.map(function (pg) {
+          return '<div class="card"><h3>' + pg.name + "</h3>" +
+            "<p>Rent: ₹" + pg.rent + " per month</p>" +
+            "<p>" + pg.area + "</p>" +
+                        "<p>Amenities: " + pg.amenities.join(", ") + "</p>" +
+            '<a href="pg.html?id=' + pg.id + '">View details</a></div>';
+        }).join("");
+      }
+
+      showPgs(pgs);
+
+      // When Find PGs is clicked
+      document.getElementById("findBtn").onclick = function () {
+        const maxRent = Number(document.getElementById("maxRent").value);
+
+        // Which amenity boxes are ticked? Collect their names into a list.
+        const selected = Array.from(document.querySelectorAll(".amenity:checked")).map(function (box) {
+          return box.value;
+        });
+
+        const matches = pgs.filter(function (pg) {
+          const rentOk = !maxRent || pg.rent <= maxRent;
+          const amenitiesOk = selected.every(function (a) {
+            return pg.amenities.includes(a);
+          });
+          return rentOk && amenitiesOk;
+        });
+        showPgs(matches);
+      };
+
+      // When Reset is clicked: clear everything and show all PGs
+      document.getElementById("resetBtn").onclick = function () {
+        document.getElementById("maxRent").value = "";
+        document.querySelectorAll(".amenity").forEach(function (box) {
+          box.checked = false;
+        });
+        showPgs(pgs);
+      };
+    </script>
+  </body>
+</html>

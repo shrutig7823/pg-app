@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>PG details</title>
+    <style>
+      body { font-family: sans-serif; max-width: 600px; margin: auto; padding: 16px; }
+      .card { border: 1px solid #ccc; border-radius: 8px; padding: 12px; margin: 8px 0; }
+    </style>
+  </head>
+  <body>
+    <p><a href="index.html">&larr; Back to results</a></p>
+
+    <div id="detail"></div>
+
+    <script src="data.js"></script>
+    <script>
+      // YOUR PART 1: read the id from the address
+      // YOUR PART 2: find the PG that has that id
+
+      const params = new URLSearchParams(window.location.search);
+      const id = Number(params.get("id"));
+      const pg = pgs.find(function (p) { return p.id === id; });
+
+      // The drawing part is already written for you
+      const detail = document.getElementById("detail");
+      if (!pg) {
+        detail.innerHTML = "<h2>PG not found</h2><p>This link doesn't match any PG.</p>";
+      } else {
+        detail.innerHTML =
+          "<h1>" + pg.name + "</h1>" +
+          '<div class="card">' +
+          "<p><strong>Area:</strong> " + pg.area + "</p>" +
+          "<p><strong>Room type:</strong> " + pg.roomType + "</p>" +
+          "<p><strong>Rent:</strong> ₹" + pg.rent + " per month</p>" +
+          "<p><strong>Deposit:</strong> ₹" + pg.deposit + "</p>" +
+          "</div>" +
+          "<p>" + pg.description + "</p>" +
+          "<h3>Amenities</h3>" +
+          "<ul>" + pg.amenities.map(function (a) { return "<li>" + a + "</li>"; }).join("") + "</ul>";
+      }
+    </script>
+  </body>
+</html>
