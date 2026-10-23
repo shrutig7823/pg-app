@@ -28,19 +28,9 @@
     <button id="resetBtn">Reset</button>
 
     <div id="results"></div>
-
+    <script src="data.js"></script>
     <script>
-      // Every amenity a PG can have. Add a word here to get a new tick box.
-      const AMENITIES = ["Food", "AC", "Wi-Fi", "Housekeeping", "Laundry", "Power backup", "Indoor games"];
-
-      // Sample PGs (made-up data)
-      const pgs = [
-        { name: "Sunrise PG (sample)", rent: 9500, area: "HSR Layout", amenities: ["AC", "Wi-Fi", "Housekeeping"] },
-        { name: "Ollie PG (sample)", rent: 12000, area: "Koramangala", amenities: ["Food", "AC", "Laundry", "Indoor games"] },
-        { name: "Feb PG (sample)", rent: 8000, area: "BTM Layout", amenities: ["Wi-Fi", "Power backup"] },
-        { name: "March (sample)", rent: 6000, area: "Green glenn Layout", amenities: ["AC", "Indoor games"] }
-      ];
-
+     
       // Draw one tick box per amenity
       document.getElementById("amenityBox").innerHTML = AMENITIES.map(function (a) {
         return '<label><input type="checkbox" class="amenity" value="' + a + '"> ' + a + '</label>';
@@ -57,7 +47,8 @@
           return '<div class="card"><h3>' + pg.name + "</h3>" +
             "<p>Rent: ₹" + pg.rent + " per month</p>" +
             "<p>" + pg.area + "</p>" +
-            "<p>Amenities: " + pg.amenities.join(", ") + "</p></div>";
+                        "<p>Amenities: " + pg.amenities.join(", ") + "</p>" +
+            '<a href="pg.html?id=' + pg.id + '">View details</a></div>';
         }).join("");
       }
 
